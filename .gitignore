@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+.history/
+
+bin/
+*.tmp/
+
+.DS_Store
+*.tar
