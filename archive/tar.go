@@ -68,7 +68,11 @@ func Tar(srcPath, dst string) error {
 	}
 	defer f.Close()
 
-	tarWriter := tar.NewWriter(f)
+	return TarStream(f, srcPath)
+}
+
+func TarStream(dst io.Writer, srcPath string) error {
+	tarWriter := tar.NewWriter(dst)
 	defer tarWriter.Close()
 
 	return filepath.Walk(srcPath, func(filePath string, fi os.FileInfo, err error) error {
