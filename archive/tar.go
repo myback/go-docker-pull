@@ -131,13 +131,21 @@ func Untar(dst string, src io.Reader) error {
 			return err
 		}
 
+		extractPath := filepath.Join(dst, header.Name)
 		switch header.Typeflag {
 		case tar.TypeDir:
-			if err := os.MkdirAll(filepath.Join(dst, header.Name), os.ModePerm); err != nil {
+			if err := os.MkdirAll(extractPath, os.FileMode(header.Mode)); err != nil && os.IsNotExist(err) {
 				return err
 			}
 		case tar.TypeReg:
-			if err := untarCreateFile(filepath.Join(dst, header.Name), tarReader); err != nil {
+			if err := untarCreateFile(extractPath, tarReader); err != nil && os.IsNotExist(err) {
+				return err
+			}
+			if err := os.Chmod(extractPath, os.FileMode(header.Mode)); err != nil {
+				return err
+			}
+		case tar.TypeSymlink:
+			if err := os.Symlink(header.Linkname, extractPath); err != nil && os.IsNotExist(err) {
 				return err
 			}
 		default:
