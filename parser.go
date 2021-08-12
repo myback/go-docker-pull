@@ -17,10 +17,11 @@ package dockerPull
 
 import (
 	"fmt"
-	"github.com/docker/docker/registry"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/docker/docker/registry"
 )
 
 const (

@@ -18,18 +18,19 @@ package dockerPull
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/docker/distribution"
-	"github.com/docker/docker/image"
-	imageV1 "github.com/docker/docker/image/v1"
-	"github.com/docker/docker/layer"
-	"github.com/docker/docker/pkg/system"
-	"github.com/opencontainers/go-digest"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/docker/distribution"
+	"github.com/docker/docker/image"
+	imageV1 "github.com/docker/docker/image/v1"
+	"github.com/docker/docker/layer"
+	"github.com/docker/docker/pkg/system"
+	"github.com/opencontainers/go-digest"
 )
 
 const (

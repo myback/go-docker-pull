@@ -17,10 +17,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	dockerPull "github.com/myback/go-docker-pull"
 	"github.com/myback/go-docker-pull/archive"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var (

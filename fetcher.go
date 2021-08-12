@@ -18,11 +18,6 @@ package dockerPull
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/docker/distribution"
-	"github.com/docker/docker/image"
-	"github.com/myback/go-docker-pull/archive"
-	"github.com/myback/go-docker-pull/progressbar"
-	"github.com/opencontainers/go-digest"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -30,8 +25,13 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/docker/distribution"
 	"github.com/docker/distribution/manifest/manifestlist"
 	"github.com/docker/distribution/manifest/schema2"
+	"github.com/docker/docker/image"
+	"github.com/myback/go-docker-pull/archive"
+	"github.com/myback/go-docker-pull/progressbar"
+	"github.com/opencontainers/go-digest"
 )
 
 var (
