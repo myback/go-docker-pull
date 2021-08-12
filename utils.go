@@ -42,7 +42,7 @@ func WWWAuthenticateParse(s string) (out WWWAuthenticate) {
 	return out
 }
 
-func (www *WWWAuthenticate) Url() (string, error) {
+func (www *WWWAuthenticate) Url(action string) (string, error) {
 	u, err := url.Parse(www.Realm)
 	if err != nil {
 		return "", nil
@@ -54,6 +54,14 @@ func (www *WWWAuthenticate) Url() (string, error) {
 
 	q.Set("service", www.Service)
 	if www.Scope != "" {
+		if action != "" {
+			scope := strings.Split(www.Scope, ":")
+			if len(scope) == 3 {
+				scope[3] = action
+				www.Scope = strings.Join(scope, ":")
+			}
+		}
+
 		q.Set("scope", www.Scope)
 	}
 	u.RawQuery = q.Encode()

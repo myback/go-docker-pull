@@ -84,7 +84,7 @@ func (c *Client) getToken(url string) error {
 	defer resp.Body.Close()
 
 	realm := WWWAuthenticateParse(resp.Header.Get("www-authenticate"))
-	u, err := realm.Url()
+	u, err := realm.Url("")
 	if err != nil {
 		return err
 	}
