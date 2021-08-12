@@ -1,5 +1,5 @@
 # go-docker-pull
-The script makes it possible to download a docker-image without docker
+The app makes it possible to download a docker-image without using docker
 
 !!! Not working with v1 registry
 ## Use
