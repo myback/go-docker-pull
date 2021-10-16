@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package dockerPull
 
 import (
@@ -83,7 +84,16 @@ func (c *Client) getToken(url string) error {
 	}
 	defer resp.Body.Close()
 
-	realm := WWWAuthenticateParse(resp.Header.Get("www-authenticate"))
+	if c.token == nil {
+		c.token = &jwtToken{}
+	}
+
+	wwwHdr := resp.Header.Get("www-authenticate")
+	if wwwHdr == "" {
+		return nil
+	}
+
+	realm := WWWAuthenticateParse(wwwHdr)
 	u, err := realm.Url("")
 	if err != nil {
 		return err
@@ -103,10 +113,6 @@ func (c *Client) getToken(url string) error {
 		return err
 	}
 	defer respToken.Body.Close()
-
-	if c.token == nil {
-		c.token = &jwtToken{}
-	}
 
 	if err := json.NewDecoder(respToken.Body).Decode(c.token); err != nil {
 		return err

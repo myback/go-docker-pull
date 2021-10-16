@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package progressbar
 
 import (
@@ -107,6 +108,6 @@ func humanView(num uint64) string {
 
 func NewProgressBar(width int8) *ProgressBar {
 	return &ProgressBar{
-		width:         width,
+		width: width,
 	}
 }

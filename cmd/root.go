@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package cmd
 
 import (
@@ -26,13 +27,13 @@ import (
 
 var (
 	//verbose                      int
-	saveCache, onlyDownload      bool
-	arch, osType, user, password string
+	saveCache, onlyDownload                     bool
+	arch, osType, registryProxy, user, password string
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "docker-pull image [image ...]",
+	Use: "docker-pull image [image ...]",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	PreRun: func(cmd *cobra.Command, args []string) {
@@ -50,11 +51,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		for _, img := range args {
-			req, err := dockerPull.ParseRequestedImage(img)
-			if err != nil {
-				fmt.Printf("%s: %s\n", img, err)
-				os.Exit(2)
-			}
+			req := dockerPull.ParseRequestedImage(img)
 
 			if err := rClient.Pull(req); err != nil {
 				fmt.Printf("%s: %s\n", img, err)
@@ -90,11 +87,11 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&saveCache, "save-cache", "s", false, "Do not delete the temp folder")
-	rootCmd.PersistentFlags().BoolVarP(&onlyDownload, "only-download", "d", false, "Only download layers")
-	//rootCmd.PersistentFlags().CountVarP(&verbose, "verbose", "v", "")
-	rootCmd.PersistentFlags().StringVarP(&arch, "arch", "a", "amd64", "CPU architecture platform image")
-	rootCmd.PersistentFlags().StringVarP(&osType, "os", "o", "linux", "OS platform image")
-	rootCmd.PersistentFlags().StringVarP(&user, "user", "u", "", "Registry user")
-	rootCmd.PersistentFlags().StringVarP(&password, "password", "p", "", "Registry password")
+	rootCmd.Flags().BoolVarP(&saveCache, "save-cache", "s", false, "Do not delete the temp folder")
+	rootCmd.Flags().BoolVarP(&onlyDownload, "only-download", "d", false, "Only download layers")
+	//rootCmd.Flags().CountVarP(&verbose, "verbose", "v", "")
+	rootCmd.Flags().StringVarP(&arch, "arch", "a", "amd64", "CPU architecture platform image")
+	rootCmd.Flags().StringVarP(&osType, "os", "o", "linux", "OS platform image")
+	rootCmd.Flags().StringVarP(&user, "user", "u", "", "Registry user")
+	rootCmd.Flags().StringVarP(&password, "password", "p", "", "Registry password")
 }

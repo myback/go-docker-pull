@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package archive
 
 import (
@@ -57,7 +58,7 @@ func (a *Gzip) GetUnarchSize() (uint32, error) {
 
 	leSize := make([]byte, 4)
 	stat, err := file.Stat()
-	if err !=nil {
+	if err != nil {
 		return 0, err
 	}
 

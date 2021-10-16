@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package dockerPull
 
 import (
@@ -84,40 +85,29 @@ func (ri *requestedImage) TempDirCreate() (string, error) {
 	return ri.tempDir, os.MkdirAll(ri.tempDir, os.ModePerm)
 }
 
-func ParseRequestedImage(image string) (*requestedImage, error) {
-	pr := &requestedImage{
+func ParseRequestedImage(s string) *requestedImage {
+	ri := &requestedImage{
 		tag: defaultTag,
 	}
 
-	reqImage := strings.Split(image, "/")
-	var ns []string
-	switch {
-	case len(reqImage) == 1:
-		ns = append(ns, officialRepoName)
-	case strings.Index(reqImage[0], ".") >= 0, strings.Index(reqImage[0], ":") >= 0:
-		pr.registryHost = reqImage[0]
-		ns = reqImage[1 : len(reqImage)-1]
-	default:
-		ns = reqImage[:len(reqImage)-1]
+	idx := strings.IndexByte(s, '/')
+	if idx > -1 && strings.IndexAny(s[:idx], ".:") > -1 {
+		ri.registryHost = s[:idx]
+		s = s[idx+1:]
 	}
 
-	var imageNameTag []string
-	if strings.Index(reqImage[len(reqImage)-1], "@") >= 0 {
-		imageNameTag = strings.Split(reqImage[len(reqImage)-1], "@")
-	} else {
-		imageNameTag = strings.Split(reqImage[len(reqImage)-1], ":")
+	idx = strings.IndexAny(s, "@:")
+	if idx > -1 {
+		ri.tag = s[idx+1:]
+		s = s[:idx]
 	}
 
-	ns = append(ns, imageNameTag[0])
-	pr.ns = strings.Join(ns, "/")
-
-	switch {
-	case len(imageNameTag) == 1:
-	case len(imageNameTag) == 2:
-		pr.tag = imageNameTag[1]
-	default:
-		return nil, fmt.Errorf("image format name %s image is invalid", image)
+	idx = strings.IndexByte(s, '/')
+	if idx == -1 && ri.registryHost == "" {
+		s = officialRepoName + "/" + s
 	}
 
-	return pr, nil
+	ri.ns = s
+
+	return ri
 }
